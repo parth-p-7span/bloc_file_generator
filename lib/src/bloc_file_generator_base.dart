@@ -1,56 +1,52 @@
 // TODO: Put public facing types in this file.
 
 /// Checks if you are awesome. Spoiler: you are.
-// class Awesome {
-//   bool get isAwesome => true;
-//
-// }
 import 'dart:io';
 
 class BlocFileGenerator {
   String? capitalize(String? name) {
-    return "${name?[0].toUpperCase()}${name?.substring(1).toLowerCase()}";
+    return '${name?[0].toUpperCase()}${name?.substring(1).toLowerCase()}';
   }
 
   void createBloc(String? label) {
-    String? name = capitalize(label);
+    var name = capitalize(label);
 
-    String blocCode = """
+    var blocCode = '''
 class ${name}Bloc{
   ${name}Bloc();
 }
-  """;
+''';
 
     File('lib/$label/bloc/${label}_bloc.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(blocCode);
+      await file.writeAsString(blocCode);
     });
   }
 
   void createEntityModel(String? label) {
-    String? name = capitalize(label);
+    var name = capitalize(label);
 
-    String entityModel = """
+    var entityModel = '''
 class ${name}GraphQlEntity{
 
   ${name}GraphQlEntity.fromJson(dynamic json) {
   
   }
 }
-  """;
+  ''';
 
     File('lib/$label/model/entity/${label}_graphql_entity.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(entityModel);
+      await file.writeAsString(entityModel);
     });
   }
 
   void createRequestModel(String? label) {
-    String? name = capitalize(label);
+    var name = capitalize(label);
 
-    String getRequestModel = """
+    var getRequestModel = '''
 class Get${name}sRequest {
   int page;
   Get${name}sRequest({required this.page,});
@@ -59,19 +55,19 @@ class Get${name}sRequest {
   bool get isInitialRequest => page == 1;
 }
 
-  """;
+  ''';
 
     File('lib/$label/model/request/get_${label}s_request.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(getRequestModel);
+      await file.writeAsString(getRequestModel);
     });
   }
 
   void createResponseModel(String? label) {
-    String? name = capitalize(label);
+    var name = capitalize(label);
 
-    String responseModel = """
+    var responseModel = """
 import '../entity/${label}_graphql_entity.dart';
 
 class Get${name}sGraphQlResponse {
@@ -104,32 +100,32 @@ class Get${name}sGraphQlResponse {
     File('lib/$label/model/response/get_${label}s_graphql_response.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(responseModel);
+      await file.writeAsString(responseModel);
       // Stuff to do after file has been created...
     });
   }
 
   void createModel(String? label) {
-    String? name = capitalize(label);
+    var name = capitalize(label);
 
     createEntityModel(label);
     createRequestModel(label);
     createResponseModel(label);
 
-    String modelCode = """
+    var modelCode = '''
 class $name{
   $name();
 }
-  """;
+  ''';
 
     File('lib/$label/model/$label.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(modelCode);
+      await file.writeAsString(modelCode);
       // Stuff to do after file has been created...
     });
 
-    String modelDataCode = """
+    var modelDataCode = """
 import '$label.dart';
     
 class ${name}sData{
@@ -165,15 +161,15 @@ class ${name}sData{
     File('lib/$label/model/${label}s_data.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(modelDataCode);
+      await file.writeAsString(modelDataCode);
       // Stuff to do after file has been created...
     });
   }
 
   void createMappers(String? label) {
-    String? name = capitalize(label);
+    var name = capitalize(label);
 
-    String entityMapper = """
+    var entityMapper = """
 import '../model/$label.dart';
 import '../model/entity/${label}_graphql_entity.dart';
 
@@ -191,10 +187,10 @@ class ${name}GraphQlEntityMapper
     File('lib/$label/mapper/${label}_graphql_entity_mapper.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(entityMapper);
+      await file.writeAsString(entityMapper);
     });
 
-    String responseMapper = """
+    var responseMapper = """
 import '../../../base/base_mapper.dart';
 import '${label}_graphql_entity_mapper.dart';
 import '../model/${label}s_data.dart';
@@ -220,42 +216,42 @@ class ${name}GraphQlResponseMapper
     File('lib/$label/mapper/${label}_graphql_response_mapper.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(responseMapper);
+      await file.writeAsString(responseMapper);
     });
   }
 
   void createSource(String? label) {
-    String? name = capitalize(label);
+    var name = capitalize(label);
 
-    String request = """
+    var request = '''
 class ${name}GraphQlRequest{
 
 }
-    """;
+    ''';
 
-    String source = """
+    var source = '''
 class ${name}GraphQlSource{
   ${name}GraphQlSource();
 }
-  """;
+  ''';
 
-    File('lib/$name/source/${name}_graphql_request.dart')
+    File('lib/$label/source/${label}_graphql_request.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(request);
+      await file.writeAsString(request);
     });
 
     File('lib/$label/source/${label}_graphql_source.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(source);
+      await file.writeAsString(source);
     });
   }
 
   void createState(String? label) {
-    String? name = capitalize(label);
+    var name = capitalize(label);
 
-    String getState = """
+    var getState = """
 import '../../base/base_ui_state.dart';
 import '../model/${label}s_data.dart';
 
@@ -281,11 +277,11 @@ class Get${name}sState extends BaseUiState<${name}sData> {
     File('lib/$label/state/get_${label}_state.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(getState);
+      await file.writeAsString(getState);
       // Stuff to do after file has been created...
     });
 
-    String uiStateManager = """
+    var uiStateManager = """
 import '../repo/${label}_repo.dart';
     
 class ${name}UiStateManager{
@@ -297,32 +293,32 @@ class ${name}UiStateManager{
     File('lib/$label/state/${label}_ui_state_manager.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(uiStateManager);
+      await file.writeAsString(uiStateManager);
       // Stuff to do after file has been created...
     });
   }
 
   void createRepo(String? label) {
-    String? name = capitalize(label);
+    var name = capitalize(label);
 
-    String repo = """
+    var repo = '''
 class ${name}Repo{
   ${name}Repo();
 }
-    """;
+    ''';
 
     File('lib/$label/repo/${label}_repo.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(repo);
+      await file.writeAsString(repo);
       // Stuff to do after file has been created...
     });
   }
 
   void createModule(String? label) {
-    String? name = capitalize(label);
+    var name = capitalize(label);
 
-    String module = """
+    var module = '''
 class ${name}Module{
   static ${name}Module _instance = ${name}Module._internal();
 
@@ -332,20 +328,21 @@ class ${name}Module{
     return _instance;
   }
 }
-    """;
+    ''';
 
     File('lib/$label/di/${label}_module.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(module);
+      await file.writeAsString(module);
       // Stuff to do after file has been created...
+      print('BLoC for $label successfully generated :)');
     });
   }
 
   void createUi(String? label) {
-    String? name = capitalize(label);
+    var name = capitalize(label);
 
-    String mainPage = """
+    var mainPage = """
 import 'package:flutter/material.dart';
 
 class ${name}Page extends StatefulWidget {
@@ -367,14 +364,14 @@ class _${name}PageState extends State<${name}Page> {
     File('lib/$label/ui/${label}_page.dart')
         .create(recursive: true)
         .then((File file) async {
-      file.writeAsString(mainPage);
+      await file.writeAsString(mainPage);
     });
   }
 
   void createFiles() {
-    print("Enter bloc name: ");
-    String? name = stdin.readLineSync();
-    print("Creating bloc module $name");
+    print('Enter bloc name: ');
+    var name = stdin.readLineSync();
+    print('Creating bloc module $name');
 
     createBloc(name);
     createModel(name);
