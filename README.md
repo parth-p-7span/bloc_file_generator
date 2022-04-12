@@ -7,8 +7,9 @@ A simple usage example:
 ```dart
 import 'package:bloc_file_generator/bloc_file_generator.dart';
 
-main() {
-  var awesome = new Awesome();
+void main() {
+  var generator = BlocFileGenerator();
+  generator.createFiles();
 }
 ```
 
