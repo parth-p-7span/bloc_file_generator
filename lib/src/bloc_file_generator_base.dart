@@ -368,6 +368,134 @@ class _${name}PageState extends State<${name}Page> {
     });
   }
 
+  void createBaseFiles() async {
+
+
+    var base_event = '''
+class BaseEvent<T> {
+  T? data;
+
+  BaseEvent({
+    this.data,
+  });
+}
+
+  ''';
+
+    var base_ui_state = '''
+class BaseUiState<T> {
+  /// Holds error if state is [UiState.error]
+  dynamic error;
+
+  /// Holds data if state is [UiState.completed]
+  T? data;
+
+  /// Holds current [UiState]
+  UiState? _state;
+
+  BaseUiState();
+
+  /// Returns [BaseUiState] with [UiState.loading]
+  BaseUiState.loading() : this._state = UiState.loading;
+
+  /// Returns [BaseUiState] with [UiState.completed]
+  BaseUiState.completed({this.data}) : this._state = UiState.completed;
+
+  /// Returns [BaseUiState] with [UiState.error]
+  BaseUiState.error(this.error) : this._state = UiState.error;
+
+  /// Returns true if the current [state] is [UiState.loading]
+  bool isLoading() => this._state == UiState.loading;
+
+  /// Returns true if the current [state] is [UiState.completed]
+  bool isCompleted() => this._state == UiState.completed;
+
+  /// Returns true if the current [state] is [UiState.error]
+  bool isError() => this._state == null || this._state == UiState.error;
+}
+
+/// UI States
+enum UiState {
+  loading,
+  completed,
+  error,
+}
+
+  ''';
+
+    var base_bloc = """
+import 'package:rxdart/rxdart.dart';
+import 'base_event.dart';
+import 'base_ui_state.dart';
+
+abstract class BaseBloc {
+  final subscriptions = CompositeSubscription();
+  final hideKeyboardSubject = PublishSubject<bool>();
+  final event = PublishSubject<BaseEvent>();
+  final state = PublishSubject<BaseUiState>();
+
+  void hideKeyboard() {
+    print('/// hide called');
+    hideKeyboardSubject.add(true);
+  }
+
+  void dispose() {
+    subscriptions.clear();
+    hideKeyboardSubject.close();
+    event.close();
+    state.close();
+  }
+}
+
+  """;
+
+    var base_mapper = '''
+abstract class BaseMapper<T, V> {
+  V map(T t);
+}
+
+  ''';
+
+
+    final check_base_event = await Directory('lib/base/base_event.dart').exists();
+    final check_ui_state = await Directory('lib/base/base_ui_state.dart').exists();
+    final check_bloc = await Directory('lib/base/base_bloc.dart').exists();
+    final check_mapper = await Directory('lib/base/base_mapper.dart').exists();
+
+    if (!check_base_event){
+      await File('lib/base/base_event.dart')
+          .create(recursive: true)
+          .then((File file) async {
+        await file.writeAsString(base_event);
+      });
+    }
+
+    if(!check_ui_state){
+      await File('lib/base/base_ui_state.dart')
+          .create(recursive: true)
+          .then((File file) async {
+        await file.writeAsString(base_ui_state);
+      });
+    }
+
+    if (!check_bloc){
+      await File('lib/base/base_bloc.dart')
+          .create(recursive: true)
+          .then((File file) async {
+        await file.writeAsString(base_bloc);
+      });
+    }
+
+    if (!check_mapper){
+      await File('lib/base/base_mapper.dart')
+          .create(recursive: true)
+          .then((File file) async {
+        await file.writeAsString(base_mapper);
+      });
+    }
+  }
+
+
   void createFiles() {
     print('Enter bloc name: ');
     var name = stdin.readLineSync();
@@ -381,5 +509,6 @@ class _${name}PageState extends State<${name}Page> {
     createRepo(name);
     createModule(name);
     createUi(name);
+    createBaseFiles();
   }
 }
