@@ -369,8 +369,6 @@ class _${name}PageState extends State<${name}Page> {
   }
 
   void createBaseFiles() async {
-
-
     var base_event = '''
 class BaseEvent<T> {
   T? data;
@@ -456,13 +454,14 @@ abstract class BaseMapper<T, V> {
 
   ''';
 
-
-    final check_base_event = await Directory('lib/base/base_event.dart').exists();
-    final check_ui_state = await Directory('lib/base/base_ui_state.dart').exists();
+    final check_base_event =
+        await Directory('lib/base/base_event.dart').exists();
+    final check_ui_state =
+        await Directory('lib/base/base_ui_state.dart').exists();
     final check_bloc = await Directory('lib/base/base_bloc.dart').exists();
     final check_mapper = await Directory('lib/base/base_mapper.dart').exists();
 
-    if (!check_base_event){
+    if (!check_base_event) {
       await File('lib/base/base_event.dart')
           .create(recursive: true)
           .then((File file) async {
@@ -470,7 +469,7 @@ abstract class BaseMapper<T, V> {
       });
     }
 
-    if(!check_ui_state){
+    if (!check_ui_state) {
       await File('lib/base/base_ui_state.dart')
           .create(recursive: true)
           .then((File file) async {
@@ -478,7 +477,7 @@ abstract class BaseMapper<T, V> {
       });
     }
 
-    if (!check_bloc){
+    if (!check_bloc) {
       await File('lib/base/base_bloc.dart')
           .create(recursive: true)
           .then((File file) async {
@@ -486,7 +485,7 @@ abstract class BaseMapper<T, V> {
       });
     }
 
-    if (!check_mapper){
+    if (!check_mapper) {
       await File('lib/base/base_mapper.dart')
           .create(recursive: true)
           .then((File file) async {
@@ -494,7 +493,6 @@ abstract class BaseMapper<T, V> {
       });
     }
   }
-
 
   void createFiles() {
     print('Enter bloc name: ');
